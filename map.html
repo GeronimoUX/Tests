@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa con Marcadores</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #F7F7F7;
+        }
+        #controls {
+            display: flex;
+            justify-content: center; /* Centrar horizontalmente */
+            align-items: center;    /* Centrar verticalmente */
+            gap: 28px;              /* Separación entre los elementos */
+            margin: 16px 0;         /* Márgenes opcionales */
+        }
+
+        .toggle-container {
+            display: flex;
+            justify-content: space-between; /* Distribuye los elementos a los lados */
+            align-items: center;
+            gap: 8px;
+            background-color: #E0D7F7;
+            border-radius: 16px;
+            padding: 10px 16px;
+            width: 280px;
+            height: 40px;
+        }
+        .toggle-label {
+            font-weight: 700;
+            font-size: 16px;
+            color: #7024C6;
+            margin: 0;
+        }
+        .toggle {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            width: 50px;
+            height: 34px;
+            background-color: #cec3e8;
+            border-radius: 34px;
+            cursor: pointer;
+            position: relative;
+        }
+        .toggle.active {
+            background-color: #7024C6;
+        }
+        .toggle .knob {
+            width: 26px;
+            height: 26px;
+            background-color: #FFFFFF;
+            border-radius: 50%;
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            transition: 0.3s;
+        }
+        .toggle.active .knob {
+            left: 20px;
+        }
+        #dropdown-container {
+            display: flex;
+            align-items: center;
+            padding: 10px 16px;
+            gap: 10px;
+            width: 280px;
+            height: 40px;
+            background: #FFFFFF;
+            border: 1.5px solid #7024C6;
+            border-radius: 16px;
+            cursor: pointer;
+            position: relative;
+        }
+        #dropdown-container::after {
+            content: "▼"; /* Flecha hacia abajo */
+            font-size: 12px;
+            color: #7024C6;
+            position: absolute;
+            right: 16px; /* Espaciado desde la derecha */
+            pointer-events: none; /* Para que no interfiera con el clic */
+        }
+        #dropdown-container span {
+            font-weight: 700;
+            font-size: 16px;
+            color: #000000;
+        }
+        #dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 60px;
+            left: 0;
+            width: 100%;
+            background: #FFFFFF;
+            border: 1.5px solid #D8D4DD;
+            border-radius: 16px;
+            z-index: 1000;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        #dropdown-menu li {
+            padding: 10px 16px;
+            cursor: pointer;
+        }
+        #dropdown-menu li:hover {
+            background-color: #E6E2F6;
+        }
+        #map {
+            width: 100%;
+            height: 500px;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div id="controls">
+        <!-- Sección de título y toggles -->
+        <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 10px;">
+            <span style="font-weight: bold; font-size: 16px; color: #000; align-self: flex-start;">
+                Filtrar por tipo
+            </span>
+            <div style="display: flex; gap: 16px;">
+                <div class="toggle-container">
+                    <span class="toggle-label">Cajeros Automáticos</span>
+                    <div id="atm-toggle" class="toggle active">
+                        <div class="knob"></div>
+                    </div>
+                </div>
+                <div class="toggle-container">
+                    <span class="toggle-label">Puntos YOLO</span>
+                    <div id="yolo-toggle" class="toggle active">
+                        <div class="knob"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Sección de título y dropdown -->
+        <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 10px;">
+            <span style="font-weight: bold; font-size: 16px; color: #000; align-self: flex-start;">
+                Buscar por ciudad
+            </span>
+            <div id="dropdown-container">
+                <ul id="dropdown-menu">
+                    <li data-city="Santa Cruz">Santa Cruz</li>
+                    <li data-city="La Paz">La Paz</li>
+                    <li data-city="Cochabamba">Cochabamba</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div id="map"></div>
+
+    <script>
+        let map;
+        let markers = [];
+        const puntoYoloIconUrl = "https://cdnprofile-landingpage-prod-cadfh6czabc6eucb.z01.azurefd.net/img/yolo-pago-marker-puntos-yolo.png";
+        const cajeroIconUrl = "https://cdnprofile-landingpage-prod-cadfh6czabc6eucb.z01.azurefd.net/img/yolo-pago-marker-atm-yolo.png";
+    
+        const locations = {
+            "Santa Cruz": [
+                { lat: -17.7807, lng: -63.1824, name: "Cajero 1", address: "Av. Monseñor Rivero", type: "atm" },
+                { lat: -17.7706, lng: -63.1793, name: "Punto YOLO 2", address: "Ventura Mall (4to Anillo y San Martín)", type: "yolo" },
+                { lat: -17.7833, lng: -63.1820, name: "Cajero 3", address: "Plaza 24 de Septiembre", type: "atm" },
+                { lat: -17.7732, lng: -63.1840, name: "Punto YOLO 4", address: "Av. Cristo Redentor, Barrio Equipetrol", type: "yolo" },
+                { lat: -17.7997, lng: -63.1808, name: "Cajero 5", address: "Terminal Bimodal", type: "atm" },
+                { lat: -17.7966, lng: -63.1938, name: "Punto YOLO 6", address: "Cine Center (3er Anillo Interno)", type: "yolo" },
+                { lat: -17.7555, lng: -63.1670, name: "Cajero 7", address: "Universidad Privada de Santa Cruz (UPSA)", type: "atm" },
+                { lat: -17.7715, lng: -63.1838, name: "Punto YOLO 8", address: "Av. Banzer, Clínica Foianini", type: "yolo" }
+            ],
+            "La Paz": [
+                { lat: -16.5002, lng: -68.1230, name: "Cajero 1", address: "Plaza Murillo", type: "atm" },
+                { lat: -16.5096, lng: -68.1193, name: "Punto YOLO 2", address: "El Prado, Centro", type: "yolo" },
+                { lat: -16.5113, lng: -68.1219, name: "Cajero 3", address: "Calle Comercio", type: "atm" },
+                { lat: -16.5180, lng: -68.1360, name: "Punto YOLO 4", address: "Zona Sopocachi", type: "yolo" },
+                { lat: -16.4968, lng: -68.1491, name: "Cajero 5", address: "Calle 21 de Calacoto", type: "atm" },
+                { lat: -16.4955, lng: -68.1387, name: "Punto YOLO 6", address: "Megacenter Irpavi", type: "yolo" },
+                { lat: -16.5033, lng: -68.1312, name: "Cajero 7", address: "Multicine La Paz", type: "atm" },
+                { lat: -16.4902, lng: -68.1331, name: "Punto YOLO 8", address: "Teleférico Amarillo", type: "yolo" }
+            ],
+            "Cochabamba": [
+                { lat: -17.3925, lng: -66.1601, name: "Cajero 1", address: "Plaza 14 de Septiembre", type: "atm" },
+                { lat: -17.3752, lng: -66.1545, name: "Punto YOLO 2", address: "Cristo de la Concordia", type: "yolo" },
+                { lat: -17.3740, lng: -66.1663, name: "Cajero 3", address: "Av. América Oeste", type: "atm" },
+                { lat: -17.3963, lng: -66.1702, name: "Punto YOLO 4", address: "Zona Recoleta", type: "yolo" },
+                { lat: -17.4143, lng: -66.1592, name: "Cajero 5", address: "Av. Blanco Galindo", type: "atm" },
+                { lat: -17.3898, lng: -66.1453, name: "Punto YOLO 6", address: "Hupermall", type: "yolo" },
+                { lat: -17.3949, lng: -66.1567, name: "Cajero 7", address: "Plaza de las Banderas", type: "atm" },
+                { lat: -17.4056, lng: -66.1432, name: "Punto YOLO 8", address: "Cine Center", type: "yolo" }
+            ]
+        };
+    
+        function initMap() {
+            map = new google.maps.Map(document.getElementById("map"), {
+                center: { lat: -17.7833, lng: -63.1821 },
+                zoom: 13,
+                mapTypeId: "roadmap",
+                styles: [
+                    { featureType: "poi", elementType: "labels", stylers: [{ visibility: "off" }] },
+                    { featureType: "poi.business", stylers: [{ visibility: "off" }] },
+                    { featureType: "poi.park", stylers: [{ visibility: "off" }] },
+                    { featureType: "poi.attraction", stylers: [{ visibility: "off" }] },
+                    { featureType: "transit", stylers: [{ visibility: "off" }] }
+                ]
+            });
+    
+            Object.keys(locations).forEach(city => addMarkers(city));
+        }
+    
+        function addMarkers(city) {
+            const cityLocations = locations[city];
+            cityLocations.forEach((location) => {
+                const iconUrl = location.type === "atm" ? cajeroIconUrl : puntoYoloIconUrl;
+    
+                const marker = new google.maps.Marker({
+                    position: { lat: location.lat, lng: location.lng },
+                    map,
+                    icon: iconUrl,
+                });
+    
+                const infoWindow = new google.maps.InfoWindow({
+                    content: `
+                        <div style="font-family: 'Plus Jakarta Sans', sans-serif; width: 280px; padding: 8px 16px;">
+                            <h3>${location.name}</h3>
+                            <p>${location.address}</p>
+                        </div>
+                    `,
+                });
+    
+                marker.addListener("click", () => {
+                    infoWindow.open(map, marker);
+                });
+    
+                markers.push(marker);
+            });
+        }
+    </script>
+    
+    <script>
+        // Ciudades disponibles
+        const cityCenters = {
+            "Santa Cruz": { lat: -17.7833, lng: -63.1821 },
+            "La Paz": { lat: -16.5002, lng: -68.1230 },
+            "Cochabamba": { lat: -17.3925, lng: -66.1601 }
+        };
+    
+        // Referencia al contenedor del dropdown
+        const dropdownContainer = document.getElementById("dropdown-container");
+    
+        // Crear el contenido del dropdown
+        const dropdownButton = document.createElement("span");
+        dropdownButton.id = "dropdown-selected";
+        dropdownButton.innerText = "Selecciona una ciudad";
+        dropdownContainer.appendChild(dropdownButton);
+    
+        const dropdownMenu = document.createElement("ul");
+        dropdownMenu.id = "dropdown-menu";
+        dropdownMenu.className = "dropdown-menu";
+    
+        // Crear los elementos de la lista
+        Object.keys(cityCenters).forEach(city => {
+            const menuItem = document.createElement("li");
+            menuItem.innerText = city;
+            menuItem.dataset.city = city;
+            dropdownMenu.appendChild(menuItem);
+        });
+    
+        dropdownContainer.appendChild(dropdownMenu);
+    
+        // Estado del menú
+        let isDropdownOpen = false;
+    
+        // Evento para abrir/cerrar el menú
+        dropdownContainer.addEventListener("click", (event) => {
+            event.stopPropagation(); // Evitar clics fuera del contenedor
+    
+            if (isDropdownOpen) {
+                dropdownMenu.style.display = "none";
+            } else {
+                dropdownMenu.style.display = "block";
+            }
+    
+            isDropdownOpen = !isDropdownOpen;
+        });
+    
+        // Evento para manejar la selección de ciudades
+        dropdownMenu.addEventListener("click", (event) => {
+            const city = event.target.dataset.city;
+    
+            if (city) {
+                // Cambiar el texto del botón
+                dropdownButton.innerText = city;
+    
+                // Centrar el mapa en la ciudad seleccionada
+                goToCity(city);
+    
+                // Cerrar el menú
+                dropdownMenu.style.display = "none";
+                isDropdownOpen = false;
+            }
+        });
+    
+        // Función para centrar el mapa
+        function goToCity(city) {
+            const target = cityCenters[city];
+            if (!target) return;
+    
+            map.setCenter(target);
+            map.setZoom(13);
+        }
+    
+        // Cerrar el menú si se hace clic fuera del dropdown
+        document.addEventListener("click", () => {
+            dropdownMenu.style.display = "none";
+            isDropdownOpen = false;
+        });
+    </script>
+    
+    <script async
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCP7ZSXl_y_vL8HqJYOdZoXf3XUaG_AiLg&callback=initMap">
+    </script>
+    
+    <script>
+        // Referencias a los botones de ATM y YOLO
+        const atmButton = document.getElementById("atm-toggle");
+        const yoloButton = document.getElementById("yolo-toggle");
+    
+        // Estados de visibilidad
+        let showAtm = true;
+        let showYolo = true;
+    
+        // Asegurar que cada marcador tenga un tipo asociado
+        function addMarkers(city) {
+            const cityLocations = locations[city];
+            cityLocations.forEach((location) => {
+                const iconUrl = location.type === "atm" ? cajeroIconUrl : puntoYoloIconUrl;
+    
+                const marker = new google.maps.Marker({
+                    position: { lat: location.lat, lng: location.lng },
+                    map,
+                    icon: iconUrl,
+                });
+    
+                // Añadimos la propiedad `type` a cada marcador
+                marker.type = location.type;
+    
+                const infoWindow = new google.maps.InfoWindow({
+                    content: `
+                        <div style="font-family: 'Plus Jakarta Sans', sans-serif; width: 280px; padding: 8px 16px;">
+                            <h3>${location.name}</h3>
+                            <p>${location.address}</p>
+                        </div>
+                    `,
+                });
+    
+                marker.addListener("click", () => {
+                    infoWindow.open(map, marker);
+                });
+    
+                markers.push(marker); // Guardar el marcador
+            });
+        }
+    
+        // Función para alternar visibilidad de marcadores según el tipo
+        function toggleMarkers(type, visible) {
+            markers.forEach(marker => {
+                if (marker.type === type) {
+                    marker.setVisible(visible); // Cambia visibilidad del marcador
+                }
+            });
+        }
+    
+        // Eventos de clic para alternar visibilidad de ATM
+        atmButton.addEventListener("click", () => {
+            showAtm = !showAtm; // Cambia el estado
+            toggleMarkers("atm", showAtm); // Alterna visibilidad
+            atmButton.classList.toggle("active", showAtm); // Cambia visualmente el toggle
+        });
+
+        // Eventos de clic para alternar visibilidad de YOLO
+        yoloButton.addEventListener("click", () => {
+            showYolo = !showYolo; // Cambia el estado
+            toggleMarkers("yolo", showYolo); // Alterna visibilidad
+            yoloButton.classList.toggle("active", showYolo); // Cambia visualmente el toggle
+        });
+
+    </script>
+    
+</body>
+</html>
