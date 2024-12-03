@@ -15,17 +15,18 @@
             align-items: center;
             background-color: #F7F7F7;
         }
+
         #controls {
             display: flex;
-            justify-content: center; /* Centrar horizontalmente */
-            align-items: center;    /* Centrar verticalmente */
-            gap: 28px;              /* Separación entre los elementos */
-            margin: 16px 0;         /* Márgenes opcionales */
+            justify-content: center; /* Centrado horizontal */
+            align-items: center;    /* Centrado vertical */
+            gap: 28px;              /* Espaciado entre elementos */
+            margin: 16px 0;         /* Márgenes */
         }
 
         .toggle-container {
             display: flex;
-            justify-content: space-between; /* Distribuye los elementos a los lados */
+            justify-content: space-between;
             align-items: center;
             gap: 8px;
             background-color: #E0D7F7;
@@ -34,12 +35,14 @@
             width: 280px;
             height: 40px;
         }
+
         .toggle-label {
             font-weight: 700;
             font-size: 16px;
             color: #7024C6;
             margin: 0;
         }
+
         .toggle {
             display: flex;
             justify-content: flex-start;
@@ -51,9 +54,11 @@
             cursor: pointer;
             position: relative;
         }
+
         .toggle.active {
             background-color: #7024C6;
         }
+
         .toggle .knob {
             width: 26px;
             height: 26px;
@@ -64,9 +69,11 @@
             left: 4px;
             transition: 0.3s;
         }
+
         .toggle.active .knob {
             left: 20px;
         }
+
         #dropdown-container {
             display: flex;
             align-items: center;
@@ -80,6 +87,7 @@
             cursor: pointer;
             position: relative;
         }
+
         #dropdown-container::after {
             content: "▼"; /* Flecha hacia abajo */
             font-size: 12px;
@@ -88,11 +96,13 @@
             right: 16px; /* Espaciado desde la derecha */
             pointer-events: none; /* Para que no interfiera con el clic */
         }
+
         #dropdown-container span {
             font-weight: 700;
             font-size: 16px;
             color: #000000;
         }
+
         #dropdown-menu {
             display: none;
             position: absolute;
@@ -108,17 +118,40 @@
             padding: 0;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
+
         #dropdown-menu li {
             padding: 10px 16px;
             cursor: pointer;
         }
+
         #dropdown-menu li:hover {
             background-color: #E6E2F6;
         }
+
         #map {
             width: 100%;
             height: 500px;
             overflow: hidden;
+        }
+
+        /* Responsividad para pantallas menores a 1100px */
+        @media (max-width: 1100px) {
+            #controls {
+                flex-direction: column; /* Cambiar disposición a vertical */
+                align-items: flex-start; /* Alinear los elementos a la izquierda */
+                gap: 20px; /* Espaciado entre componentes */
+            }
+        }
+
+        /* Responsividad para pantallas menores a 740px */
+        @media (max-width: 740px) {
+            /* Cambiar disposición de los toggles a vertical */
+            #togglesfila {
+                display: flex;
+                flex-direction: column; /* Cambia a disposición vertical */
+                gap: 16px; /* Espaciado entre toggles */
+                align-items: flex-start; /* Alinea a la izquierda */
+            }
         }
     </style>
 </head>
@@ -129,7 +162,7 @@
             <span style="font-weight: bold; font-size: 16px; color: #000; align-self: flex-start;">
                 Filtrar por tipo
             </span>
-            <div style="display: flex; gap: 16px;">
+            <div id="togglesfila" style="display: flex; gap: 16px;">
                 <div class="toggle-container">
                     <span class="toggle-label">Cajeros Automáticos</span>
                     <div id="atm-toggle" class="toggle active">
@@ -151,11 +184,7 @@
                 Buscar por ciudad
             </span>
             <div id="dropdown-container">
-                <ul id="dropdown-menu">
-                    <li data-city="Santa Cruz">Santa Cruz</li>
-                    <li data-city="La Paz">La Paz</li>
-                    <li data-city="Cochabamba">Cochabamba</li>
-                </ul>
+                <ul id="dropdown-menu"></ul>
             </div>
         </div>
     </div>
@@ -170,81 +199,2138 @@
     
         const locations = {
             "Santa Cruz": [
-                { lat: -17.7807, lng: -63.1824, name: "Cajero 1", address: "Av. Monseñor Rivero", type: "atm" },
-                { lat: -17.7706, lng: -63.1793, name: "Punto YOLO 2", address: "Ventura Mall (4to Anillo y San Martín)", type: "yolo" },
-                { lat: -17.7833, lng: -63.1820, name: "Cajero 3", address: "Plaza 24 de Septiembre", type: "atm" },
-                { lat: -17.7732, lng: -63.1840, name: "Punto YOLO 4", address: "Av. Cristo Redentor, Barrio Equipetrol", type: "yolo" },
-                { lat: -17.7997, lng: -63.1808, name: "Cajero 5", address: "Terminal Bimodal", type: "atm" },
-                { lat: -17.7966, lng: -63.1938, name: "Punto YOLO 6", address: "Cine Center (3er Anillo Interno)", type: "yolo" },
-                { lat: -17.7555, lng: -63.1670, name: "Cajero 7", address: "Universidad Privada de Santa Cruz (UPSA)", type: "atm" },
-                { lat: -17.7715, lng: -63.1838, name: "Punto YOLO 8", address: "Av. Banzer, Clínica Foianini", type: "yolo" }
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "C.Junin esq.21 de Mayo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.782947,
+                    "lng": -63.183855
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av.Pirai Esq. 2do. Anillo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 07:00 a 21:00\nDomingo: 07:00 a 21:00",
+                    "lat": -17.79052978,
+                    "lng": -63.19488555
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av.Irala Esq.Monseñor Santiestevan\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.792159,
+                    "lng": -63.179759
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av.Irala Nro.564\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.79239,
+                    "lng": -63.181944
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av.Argamosa Esq. Charcas\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.779561,
+                    "lng": -63.172895
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av.Cañoto Esq.Landivar\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.782947,
+                    "lng": -63.183855
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av.Trinidad Esq.2do.Anillo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.77056855,
+                    "lng": -63.17125529
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av.Cañoto Esq.Mexico\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 07:00 a 21:00\nDomingo: 07:00 a 21:00",
+                    "lat": -17.77840738,
+                    "lng": -63.1885815
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Calle 8 Av.Principal\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.796752,
+                    "lng": -63.134775
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av.Cristo Redentor Nro.110\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.76405343,
+                    "lng": -63.18117458
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av.Grigota Esq.Bonifacio Barrientos\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.801397,
+                    "lng": -63.19678
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av.Virgen de Cotoca 2do.Anillo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.78234,
+                    "lng": -63.163424
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av.Banzer y 7mo.Anillo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.72538361,
+                    "lng": -63.16527932
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av.San Martin Esq.Calle 9\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 07:00 a 21:00\nDomingo: 07:00 a 21:00",
+                    "lat": -17.76554789,
+                    "lng": -63.19556415
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av.Teniente Aurelio Esq.3er.Anillo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.81426967,
+                    "lng": -63.1823717
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Calle Andres Manso Esq.M.Santiestevan\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.79437247,
+                    "lng": -63.17899797
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av.Paragua Esq. 4to.Anillo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.76573486,
+                    "lng": -63.14877703
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av.Viedma Esq.Ballivian\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.78420769,
+                    "lng": -63.1722388
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av.Santos Dumont Esq.5to.Anillo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 07:00 a 21:00\nDomingo: 07:00 a 21:00",
+                    "lat": -17.83341558,
+                    "lng": -63.18618044
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av.Banzer Esq.Tercer Anillo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.758567,
+                    "lng": -63.178243
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av.Roque Aguilera Esq.Mataral\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.79062172,
+                    "lng": -63.20470243
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av.Grigota Esq.Iberica\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.80761996,
+                    "lng": -63.20392996
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av.Cañoto Esq.Libertad\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.77543334,
+                    "lng": -63.18318221
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av.Busch Esq.Tercer Anillo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.77256493,
+                    "lng": -63.20305019
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. El Trompillo esq. Tomás de Lezo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.80126381,
+                    "lng": -63.18709249
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av.Virgen de Cotoca Esq.Union\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 07:00 a 21:00\nDomingo: 07:00 a 21:00",
+                    "lat": -17.7776089,
+                    "lng": -63.14235717
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Doble Via Guardia Km.6\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.827495,
+                    "lng": -63.226246
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av.Japon Esq.Paragua\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.7698587,
+                    "lng": -63.1548828
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Avenida Paurito 6to Anillo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.822744,
+                    "lng": -63.1449
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av.Alemana Esq.4to.Anillo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.7524326,
+                    "lng": -63.1637451
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av.Beni Esq.4to.Anillo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.75027148,
+                    "lng": -63.16976934
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Banzer Esq. 6to Anillo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.73234807,
+                    "lng": -63.16865354
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Banzer Esq. 4to Anillo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.75021528,
+                    "lng": -63.17620128
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Irala esq. Av. Argentina\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.791429,
+                    "lng": -63.173482
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Vallegrande esq 5to anillo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.824623,
+                    "lng": -63.206373
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Busch esq 2do Anillo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.773389,
+                    "lng": -63.192067
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Grigotá entre 5to. y 6to. Anillo (Condominio San Francisco)\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.82027036,
+                    "lng": -63.21816224
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Calle Maria de Oliveira y 4to.Anillo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.754235,
+                    "lng": -63.196686
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av.Colinas del Urubo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.7496107,
+                    "lng": -63.21565974
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av.Roque Aguilera Villa Fatima\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.805828,
+                    "lng": -63.197835
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Roque Aguilera Esq.Roca y Coronado\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.78563616,
+                    "lng": -63.20436228
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "C/16 de Julio S/N entre Warnes y 1ro de mayo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 07:00 a 21:00\nDomingo: 07:00 a 21:00",
+                    "lat": -17.346132,
+                    "lng": -63.254857
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av 4to Anillo , Mall Ventura PB Local 28\n\nHorarios:\nLunes: 10:00 a 21:00\nMartes: 10:00 a 21:00\nMiércoles: 10:00 a 21:00\nJueves: 10:00 a 21:00\nViernes: 10:00 a 21:00\nSábado: 11:00 a 21:00\nDomingo: 11:00 a 21:00",
+                    "lat": -17.75493889,
+                    "lng": -63.19999722
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. 25 de Mayo Nro 4 Barrio Central\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.50879444,
+                    "lng": -63.16879722
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Avenida Piraí entre Cuarto y Quinto Anillo, Condominio Santa Mónica\n\nHorarios:\nLunes: 15:00 a 21:00\nMartes: 15:00 a 21:01\nMiércoles: 15:00 a 21:02\nJueves: 15:00 a 21:03\nViernes: 15:00 a 21:04\nSábado: 15:00 a 21:05\nDomingo: 15:00 a 21:06",
+                    "lat": -17.799277,
+                    "lng": -63.220723
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Avenida 3 Pasos al Frente, alado surtidor Octano\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.796045,
+                    "lng": -63.15667
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Avenida  Cheguevara\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.802048,
+                    "lng": -63.135294
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Avenida La Barranca esq. Perimetral  Nº 32 Barrio Aeronautico\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.798925,
+                    "lng": -63.175329
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Calle Ofelia Sánchez Nº 77 Urbanizacion Valle Sánchez\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.659447,
+                    "lng": -63.165966
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Avenida 2 de Agosto entre 5to y 6to anillo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.743885,
+                    "lng": -63.149808
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Avenida Uruguay Esq. Mamoré diagonal al Avion Pirata\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.775247,
+                    "lng": -63.174854
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Avenida Héroes del Chaco Esquina 4to Anillo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.800623,
+                    "lng": -63.150478
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Doble Via La Guardia UV1 Mza 7, Zona Sur Carretera a Cochabamba\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.892871,
+                    "lng": -63.327254
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Carretera Antigua a Cochabamba UV1 Manzana 139 Barrio El Paraíso Localidad El Torno\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.987312,
+                    "lng": -63.377954
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Avenida Cristo Redentor Segundo Anillo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.770323,
+                    "lng": -63.182698
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Calle Libertad esquina La Paz\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -16.375322,
+                    "lng": -60.959811
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Avenida Paraguá Segundo anillo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.774306,
+                    "lng": -63.165453
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Tercer anillo interno entre avenida Alemana y Mutualista, calle Cupechicho\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.761495,
+                    "lng": -63.165949
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Avenida Radial 13 esquina 4to anillo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.8215215,
+                    "lng": -63.1763801
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "3er Anillo Interno y Ovidio Barbery\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.760982,
+                    "lng": -63.187014
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Avenida Radial 17/5 5to Anillo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.812245,
+                    "lng": -63.219538
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. 24 de Septiembre Esq. Avaroa Plaza Principal de Montero\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.342408,
+                    "lng": -63.255086
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Miguel de Cervantes B\n\nHorarios:\nLunes: 15:00 a 21:00\nMartes: 15:00 a 21:00\nMiércoles: 15:00 a 21:00\nJueves: 15:00 a 21:00\nViernes: 15:00 a 21:00\nSábado: Sin horario\nDomingo: Sin horario",
+                    "lat": -17.841613,
+                    "lng": -63.196268
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Mercado Primavera\n\nHorarios:\nLunes: 08:00 a 21:00\nMartes: 08:00 a 21:00\nMiércoles: 08:00 a 21:00\nJueves: 08:00 a 21:00\nViernes: 08:00 a 21:00\nSábado: 09:00 a 21:00\nDomingo: 09:00 a 21:00",
+                    "lat": -17.823384,
+                    "lng": -63.164857
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Cumavi Esq. Av. 16 de Julio\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.792398,
+                    "lng": -63.127199
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Los Lotes\n\nHorarios:\nLunes: 08:00 a 21:00\nMartes: 08:00 a 21:00\nMiércoles: 08:00 a 21:00\nJueves: 08:00 a 21:00\nViernes: 08:00 a 21:00\nSábado: 09:00 a 21:00\nDomingo: 09:00 a 21:00",
+                    "lat": -17.852757,
+                    "lng": -63.18131
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Avenida Santos Dumont 4to Anillo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.82234,
+                    "lng": -63.184788
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Avenida Santos Dumont entre 6to y 7mo anillo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.850332,
+                    "lng": -63.18321
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Paurito entre 8vo y 9no anillo, frente al surtidor las Orquídeas.\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.837445,
+                    "lng": -63.127336
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. San Silvestre entre 5to y 6to anillo, entre Av. Perimetral y Av. Cristo Redentor.\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.7357436,
+                    "lng": -63.1706795
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Virgen de Luján\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.7517,
+                    "lng": -63.1292
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Avenida Pirai 3er anillo externo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.795263,
+                    "lng": -63.205869
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Virgen de Cotoca y 6to anillo\n\nHorarios:\nLunes: 08:00 a 21:00\nMartes: 08:00 a 21:00\nMiércoles: 08:00 a 21:00\nJueves: 08:00 a 21:00\nViernes: 08:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.7700819,
+                    "lng": -63.1224508
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Beni 6to anillo Barrio Metalmec Norte\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.734735,
+                    "lng": -63.160114
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Beni 3er anillo interno\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.7599,
+                    "lng": -63.1746
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Avenida Noel Kempff Mercado, 3er anillo interno zona Oncologico\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.763093,
+                    "lng": -63.192864
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Radial 17 1/2 4to anillo Barrio Cañoto\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.805544,
+                    "lng": -63.213149
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Santos Dumont Esq Pilcomayo Barrio Ramafa\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.8023,
+                    "lng": -63.1803
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Remanso Barrio La Santa Cruz\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.7152,
+                    "lng": -63.1662
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Monseñor Rivero Y 1er Anillo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.7735812,
+                    "lng": -63.1820414
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av.Banzer entre 8vo y 7mo anillo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.721389,
+                    "lng": -63.164194
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av.Banzer entre 7mo y 8vo anillo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.719333,
+                    "lng": -63.163139
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Mutualista Esq. 6to anillo (Cambódromo)\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.742883,
+                    "lng": -63.144767
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Radial 27 esq. 4to anillo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.749244,
+                    "lng": -63.180024
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Piraí 6to y 7mo anillo frente al campus UPB\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.81912994,
+                    "lng": -63.233284
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Doble vía La Guardia entre 3er y 4to anillo Paseo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.807362,
+                    "lng": -63.202887
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Z.Norte KM 11,5 por el cementerio las misiones frente al cond. Sevilla Las Terrazas\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.68338,
+                    "lng": -63.15474
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Moscú esq. 5to anillo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.828278,
+                    "lng": -63.202781
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Radial 10 Esq. Av. 6to anillo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.812426,
+                    "lng": -63.136359
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Alemana esq. 5to anillo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.744269,
+                    "lng": -63.160689
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Radial 27 y 5to A. - Cond. Villa Toscana\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.737675,
+                    "lng": -63.179691
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Cristobal de Mendoza 2do y Av. Brasil (Terminal)\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.78704,
+                    "lng": -63.162336
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Bolivia 6to A.y Av. Bolivia (El Trillo)\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.842579,
+                    "lng": -63.172484
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. San Martin C 3 Norte . 3er y 4to A. - Equipetrol\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.7587604,
+                    "lng": -63.199633
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Mercado Nueva Ramada 6to y 7mo A. Av. San Martin de Porres\n\nHorarios:\nLunes: 08:00 a 21:00\nMartes: 08:00 a 21:00\nMiércoles: 08:00 a 21:00\nJueves: 08:00 a 21:00\nViernes: 08:00 a 21:00\nSábado: 09:00 a 21:00\nDomingo: 09:00 a 21:00",
+                    "lat": -17.836809,
+                    "lng": -63.216261
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Doble Vía la Guardia km 8 8vo anillo frente al surtidor Berea \n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.837245,
+                    "lng": -63.237474
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Zona norte 7mo anillo entre Av. Alemana y 2 de Agosto\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.732706,
+                    "lng": -63.146824
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Alemana esq.3er anillo externo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.759683,
+                    "lng": -63.166675
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "3 Anillo interno ingreso al comercial INDANA\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.792975,
+                    "lng": -63.204811
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Cristo Redentor  Km. 8 ½ al Norte \n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.700231,
+                    "lng": -63.160236
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "7mo Anillo Zona La Campana\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.81875416,
+                    "lng": -63.118831
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Calle 5 Oeste zona villa 1ero de Mayo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.795077,
+                    "lng": -63.134121
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Doble vía la guardia y Av. 5to Anillo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.815843,
+                    "lng": -63.213056
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Miguel de Cervantes Esq. 7mo Anillo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.852238,
+                    "lng": -63.199022
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Alemania Esq. Av. 6to Anillo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.7372309,
+                    "lng": -63.1537566
+                },
+                {
+                    "type": "atm",
+                    "name": "IDEPRO",
+                    "address": "Zona Sur, UV. 2, MZA.5, Barrio 24 de Septiembre\n\nHorarios:\nLunes: 08:30 a 16:00\nMartes: 08:30 a 16:00\nMiércoles: 08:30 a 16:00\nJueves: 08:30 a 16:00\nViernes: 08:30 a 16:00\nSábado: 09:00 a 12:30\nDomingo: Sin horario",
+                    "lat": -16.328842,
+                    "lng": -62.910307
+                },
+                {
+                    "type": "atm",
+                    "name": "IDEPRO",
+                    "address": "Barrio Los Cafeces, UV 2, MZA 3, lote 3, carretera Santa Cruz – Trinidad\n\nHorarios:\nLunes: 08:30 a 16:00\nMartes: 08:30 a 16:00\nMiércoles: 08:30 a 16:00\nJueves: 08:30 a 16:00\nViernes: 08:30 a 16:00\nSábado: 09:00 a 12:30\nDomingo: Sin horario",
+                    "lat": -16.9088361654,
+                    "lng": -62.6186136353
+                },
+                {
+                    "type": "atm",
+                    "name": "IDEPRO",
+                    "address": "Av. Epifanio Ríos s/n, lote 5A, MZA 46, Barrio Villa Estudiante \n\nHorarios:\nLunes: 08:30 a 16:00\nMartes: 08:30 a 16:00\nMiércoles: 08:30 a 16:00\nJueves: 08:30 a 16:00\nViernes: 08:30 a 16:00\nSábado: 09:00 a 12:30\nDomingo: Sin horario",
+                    "lat": -17.402898668,
+                    "lng": -63.8872763641
+                },
+                {
+                    "type": "atm",
+                    "name": "IDEPRO",
+                    "address": "Calle Bolivar No. 59, entre Av. Avaroa y Calle Barrientos.  \n\nHorarios:\nLunes: 08:30 a 16:00\nMartes: 08:30 a 16:00\nMiércoles: 08:30 a 16:00\nJueves: 08:30 a 16:00\nViernes: 08:30 a 16:00\nSábado: 09:00 a 12:30\nDomingo: Sin horario",
+                    "lat": -18.1215728638,
+                    "lng": -63.9587770026
+                },
+                {
+                    "type": "atm",
+                    "name": "IDEPRO",
+                    "address": "Calle San Francisco, lote No. 13, Barrio Centro Florida\n\nHorarios:\nLunes: 08:30 a 16:00\nMartes: 08:30 a 16:00\nMiércoles: 08:30 a 16:00\nJueves: 08:30 a 16:00\nViernes: 08:30 a 16:00\nSábado: 09:00 a 12:30\nDomingo: Sin horario",
+                    "lat": -17.2689638969,
+                    "lng": -62.5556105186
+                },
+                {
+                    "type": "atm",
+                    "name": "IDEPRO",
+                    "address": "Calle Juan de Dios Montero s/n, entre Calles Ayacucho y Dean Toledo Pimentel  \n\nHorarios:\nLunes: 08:30 a 16:00\nMartes: 08:30 a 16:00\nMiércoles: 08:30 a 16:00\nJueves: 08:30 a 16:00\nViernes: 08:30 a 16:00\nSábado: 09:00 a 12:30\nDomingo: Sin horario",
+                    "lat": -17.7543525347,
+                    "lng": -62.9940913363
+                },
+                {
+                    "type": "atm",
+                    "name": "IDEPRO",
+                    "address": "Avenida República  No. 1315, a media cuadra de la Plaza Principal,  El Torno \n\nHorarios:\nLunes: 08:30 a 16:00\nMartes: 08:30 a 16:00\nMiércoles: 08:30 a 16:00\nJueves: 08:30 a 16:00\nViernes: 08:30 a 16:00\nSábado: 09:00 a 12:30\nDomingo: Sin horario",
+                    "lat": -17.9913622113,
+                    "lng": -63.3815599826
+                },
+                {
+                    "type": "atm",
+                    "name": "IDEPRO",
+                    "address": "Calle René Moreno No. 476, Zona Central, Casco Viejo\n\nHorarios:\nLunes: 08:30 a 16:00\nMartes: 08:30 a 16:00\nMiércoles: 08:30 a 16:00\nJueves: 08:30 a 16:00\nViernes: 08:30 a 16:00\nSábado: 09:00 a 12:30\nDomingo: Sin horario",
+                    "lat": -17.7886418091,
+                    "lng": -63.1809252377
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Virgen de Cotoca entre 7mo y 8vo anillo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": " -17,766870",
+                    "lng": " -63,109986"
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Urb. Cotoca Av. Ecológica esq. Palma Verde s/n\n\nHorarios:\nLunes: 08:00 a 21:00\nMartes: 08:00 a 21:00\nMiércoles: 08:00 a 21:00\nJueves: 08:00 a 21:00\nViernes: 08:00 a 21:00\nSábado: 09:00 a 21:00\nDomingo: 09:00 a 21:00",
+                    "lat": " -17,756926",
+                    "lng": " -63,092635"
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Principal Satélite Norte Calle 26 \n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": " -17,604870",
+                    "lng": -63.141916
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Beni y 6to anillo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.734613,
+                    "lng": -63.16243
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Santa Cruz entre Av. Bolívar y Defensores del Acre\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.754958,
+                    "lng": -62.9965614
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Paurito entre Av. Principal plan 3000 y calle 3 de mayo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.8293170928955,
+                    "lng": -63.1388664245605
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Tres pasos al frente y 4to anillo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": " -17,798040",
+                    "lng": " -63,150373"
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Avenida Paurito Nro. 5250 , Uv Et-53, Manzano 2, Zona Plan 3000.\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -17.8193440468672,
+                    "lng": -63.1481604430181
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Avenida Grigotá Nro. 622, Uv-10, Manzana 11, Entre Segundo Anillo y Calle La Guardia (Frente a la Plazuela Fátima), Zona La Ramada.\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -17.7975510848142,
+                    "lng": -63.1923611598446
+                },
+                {
+                    "type": "atm",
+                    "name": "LA MERCED",
+                    "address": "Calle Junín Nro 363 entre España y Santa Bárbara\n\nHorarios:\nLunes: 08:00 a 15:00\nMartes: 08:00 a 15:00\nMiércoles: 08:00 a 15:00\nJueves: 08:00 a 15:00\nViernes: 08:00 a 15:00\nSábado: 08:30 a 12:30\nDomingo: Sin horario",
+                    "lat": -17.7830361111,
+                    "lng": -63.1854472222
+                },
+                {
+                    "type": "atm",
+                    "name": "LA MERCED",
+                    "address": "Av. Mutualista Nº 2390 Edif. Carla Maria entre Guayabos y Taracoe.\n\nHorarios:\nLunes: 08:00 a 15:00\nMartes: 08:00 a 15:00\nMiércoles: 08:00 a 15:00\nJueves: 08:00 a 15:00\nViernes: 08:00 a 15:00\nSábado: 08:30 a 12:30\nDomingo: Sin horario",
+                    "lat": -17.76605,
+                    "lng": -63.161951
+                },
+                {
+                    "type": "atm",
+                    "name": "LA MERCED",
+                    "address": "Av. Grigotá Nº 620, entre Av. 26 de Febrero y Calle La Guardia, frenta a la Plazuela Fatima.\n\nHorarios:\nLunes: 08:00 a 15:00\nMartes: 08:00 a 15:00\nMiércoles: 08:00 a 15:00\nJueves: 08:00 a 15:00\nViernes: 08:00 a 15:00\nSábado: 08:30 a 12:30\nDomingo: Sin horario",
+                    "lat": -17.7975860362,
+                    "lng": -63.1923444306
+                },
+                {
+                    "type": "atm",
+                    "name": "LA MERCED",
+                    "address": "Yapacaní, calle Cochabamba Nº281 Esq. Junín\n\nHorarios:\nLunes: 08:00 a 15:00\nMartes: 08:00 a 15:00\nMiércoles: 08:00 a 15:00\nJueves: 08:00 a 15:00\nViernes: 08:00 a 15:00\nSábado: 08:30 a 12:30\nDomingo: Sin horario",
+                    "lat": -17.4008194444,
+                    "lng": -63.8847888889
+                },
+                {
+                    "type": "atm",
+                    "name": "LA MERCED",
+                    "address": "Ascención de Guarayos, Av. Bush esq. Conrado Urapi a 1 cuadra de la Plaza Principal\n\nHorarios:\nLunes: 08:00 a 15:00\nMartes: 08:00 a 15:00\nMiércoles: 08:00 a 15:00\nJueves: 08:00 a 15:00\nViernes: 08:00 a 15:00\nSábado: 08:30 a 12:30\nDomingo: Sin horario",
+                    "lat": -15.8954972222,
+                    "lng": -63.1880833333
+                },
+                {
+                    "type": "atm",
+                    "name": "LA MERCED",
+                    "address": "Cotoca, Av. Santa Cruz Nº 63, esq. Bolivar\n\nHorarios:\nLunes: 08:00 a 15:00\nMartes: 08:00 a 15:00\nMiércoles: 08:00 a 15:00\nJueves: 08:00 a 15:00\nViernes: 08:00 a 15:00\nSábado: 08:30 a 12:30\nDomingo: Sin horario",
+                    "lat": -17.7548944444,
+                    "lng": -62.9964083333
+                },
+                {
+                    "type": "atm",
+                    "name": "LA MERCED",
+                    "address": "Montero, Plaza Principal, esq. Sucre y Warnes.\n\nHorarios:\nLunes: 08:00 a 15:00\nMartes: 08:00 a 15:00\nMiércoles: 08:00 a 15:00\nJueves: 08:00 a 15:00\nViernes: 08:00 a 15:00\nSábado: 08:30 a 12:30\nDomingo: Sin horario",
+                    "lat": -17.3428722222,
+                    "lng": -63.2559583333
+                },
+                {
+                    "type": "atm",
+                    "name": "LA MERCED",
+                    "address": "Samaipata, Calle Arce, entre calles Sucre y Campero, al frente de la plaza principal\n\nHorarios:\nLunes: 08:00 a 15:00\nMartes: 08:00 a 15:00\nMiércoles: 08:00 a 15:00\nJueves: 08:00 a 15:00\nViernes: 08:00 a 15:00\nSábado: 08:30 a 12:30\nDomingo: Sin horario",
+                    "lat": -18.1794792249,
+                    "lng": -63.875321381
+                },
+                {
+                    "type": "atm",
+                    "name": "LA MERCED",
+                    "address": "Concepción, Calle Saturnino Saucedo entre c/Beni y German Bush, al lado de Of. Cotas\n\nHorarios:\nLunes: 08:00 a 15:00\nMartes: 08:00 a 15:00\nMiércoles: 08:00 a 15:00\nJueves: 08:00 a 15:00\nViernes: 08:00 a 15:00\nSábado: 08:30 a 12:30\nDomingo: Sin horario",
+                    "lat": -16.1324694444,
+                    "lng": -62.0257
+                },
+                {
+                    "type": "atm",
+                    "name": "LA MERCED",
+                    "address": "Calle Murillo S/N entre las avenidas Manuel Morales y Kenedy, frente al nuevo mercado 23 de marzo.\n\nHorarios:\nLunes: 08:00 a 15:00\nMartes: 08:00 a 15:00\nMiércoles: 08:00 a 15:00\nJueves: 08:00 a 15:00\nViernes: 08:00 a 15:00\nSábado: 08:30 a 12:30\nDomingo: Sin horario",
+                    "lat": -16.3790710122,
+                    "lng": -60.9668354921
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Camino Montecristo\n\nHorarios:\nLunes: 14:00 a 21:00\nMartes: 14:00 a 21:00\nMiércoles: 14:00 a 21:00\nJueves: 14:00 a 21:00\nViernes: 14:00 a 21:00\nSábado: Sin horario\nDomingo: 14:00 a 21:00",
+                    "lat": -17.752003,
+                    "lng": -63.093743
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Av. Virgen de Cotoca N°100, entre calle 8 Juan Flores y Av. La Pascana, Zona Este U.V. 153\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 8:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -17.7700661,
+                    "lng": -63.1219056
+                },
+                {
+                    "type": "atm",
+                    "name": "AYACUCHO \"CAFÉ INTERNET\"",
+                    "address": "Zona Centro, Calle España y Ayacucho\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 07:00 a 21:00\nDomingo: 07:00 a 21:00",
+                    "lat": -17.78390427,
+                    "lng": -63.18549136
+                },
+                {
+                    "type": "atm",
+                    "name": "MONTERO PLAZA \"CAFÉ INTERNET\"",
+                    "address": "Calle Warnes Nro 33 Barrio Central entre calle Bolivar y calle independencia \n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 07:00 a 21:00\nDomingo: 07:00 a 21:00",
+                    "lat": -17.342143866,
+                    "lng": -63.256317644
+                },
+                {
+                    "type": "atm",
+                    "name": "BIOPETROL",
+                    "address": "Es Piraí Srl Suc Doble Via La Guardia Esquina 8° anillo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 07:00 a 21:00\nDomingo: 07:00 a 21:00",
+                    "lat": -17.83761,
+                    "lng": -63.23812
+                },
+                {
+                    "type": "atm",
+                    "name": "IDEPRO",
+                    "address": "Avenida Canada Pailita conocida también como Avenida Paurito No. 6025, U.V. 150 MZA. 37, Zona Plan 3000\n\nHorarios:\nLunes: 08:30 a 16:15\nMartes: 08:30 a 16:15\nMiércoles: 08:30 a 16:15\nJueves: 08:30 a 16:15\nViernes: 08:30 a 16:15\nSábado: 09:00 a 12:15\nDomingo: Sin horario",
+                    "lat": -17.823061889,
+                    "lng": -63.144093089
+                },
+                {
+                    "type": "atm",
+                    "name": "IDEPRO",
+                    "address": "Avenida Luján No. 6780, Zona Noreste, Barrio La Cabana\n\nHorarios:\nLunes: 08:30 a 16:15\nMartes: 08:30 a 16:15\nMiércoles: 08:30 a 16:15\nJueves: 08:30 a 16:15\nViernes: 08:30 a 16:15\nSábado: 09:00 a 12:15\nDomingo: Sin horario",
+                    "lat": -17.7446897002,
+                    "lng": -63.1185253911
+                },
+                {
+                    "type": "atm",
+                    "name": "IDEPRO",
+                    "address": "Avenida Doble Vía la Guardia No. 6575,Barrio el Bajío, U.V 126, Manzana 13\n\nHorarios:\nLunes: 08:30 a 16:15\nMartes: 08:30 a 16:15\nMiércoles: 08:30 a 16:15\nJueves: 08:30 a 16:15\nViernes: 08:30 a 16:15\nSábado: 09:00 a 12:15\nDomingo: Sin horario",
+                    "lat": -17.829160075,
+                    "lng": -63.2277935405
+                }
             ],
-            "La Paz": [
-                { lat: -16.5002, lng: -68.1230, name: "Cajero 1", address: "Plaza Murillo", type: "atm" },
-                { lat: -16.5096, lng: -68.1193, name: "Punto YOLO 2", address: "El Prado, Centro", type: "yolo" },
-                { lat: -16.5113, lng: -68.1219, name: "Cajero 3", address: "Calle Comercio", type: "atm" },
-                { lat: -16.5180, lng: -68.1360, name: "Punto YOLO 4", address: "Zona Sopocachi", type: "yolo" },
-                { lat: -16.4968, lng: -68.1491, name: "Cajero 5", address: "Calle 21 de Calacoto", type: "atm" },
-                { lat: -16.4955, lng: -68.1387, name: "Punto YOLO 6", address: "Megacenter Irpavi", type: "yolo" },
-                { lat: -16.5033, lng: -68.1312, name: "Cajero 7", address: "Multicine La Paz", type: "atm" },
-                { lat: -16.4902, lng: -68.1331, name: "Punto YOLO 8", address: "Teleférico Amarillo", type: "yolo" }
+            "Beni": [
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Plaza Jose Ballivian\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 18:00 a 21:00\nDomingo: 09:00 a 13:00 y 18:00 a 21:00",
+                    "lat": -14.835101,
+                    "lng": -64.90353
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Plaza 3 de Febrero acera norte\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 11:00 y 17:00 a 21:00\nSábado: 07:00 a 11:00 y 17:00 a 21:00\nDomingo: 07:00 a 11:00 y 17:00 a 21:00",
+                    "lat": -10.9969781,
+                    "lng": -66.074967
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Avenida Bolivar Esquina Adolfo Velasco\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 18:00 a 21:00\nDomingo: 09:00 a 13:00 y 18:00 a 21:00",
+                    "lat": -14.829825,
+                    "lng": -64.89172
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Calle Pando, S/N, entre calles Bolívar y German Busch, Zona Central.\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -14.441779,
+                    "lng": -67.527632
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Calle Antofagasta, S/N, entre calles Sucre y Tarija, Zona el atajo. \n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -14.8591512454897,
+                    "lng": -66.7476012206932
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Calle Tarope, S/N, entre calles Hernán Velarde Rojas e Isiboro, Zona Pompeya .\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -14.8409167434113,
+                    "lng": -64.9026183961174
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Avenida Rurrenabaque, S/N, entre calles 6 y 7, Zona Pacajes.\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -15.1475970541365,
+                    "lng": -67.0359898968811
+                },
+                {
+                    "type": "atm",
+                    "name": "IDEPRO",
+                    "address": "AV.MÁXIMO HENNICKE S/N\n\nHorarios:\nLunes: 08:30 a 16:15\nMartes: 08:30 a 16:15\nMiércoles: 08:30 a 16:15\nJueves: 08:30 a 16:15\nViernes: 08:30 a 16:15\nSábado: 09:00 a 12:15\nDomingo: Sin horario",
+                    "lat": -10.9960777778,
+                    "lng": -66.073675
+                }
+            ],
+            "Chuquisaca": [
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "C. Real Audiencia de Charcas Nro. 26\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 07:00 a 21:00\nDomingo: 07:00 a 21:00",
+                    "lat": -19.048714,
+                    "lng": -65.259407
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Avenida Las Americas entre calles Panamá y Honduras, zona  Garcilazo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 07:00 a 21:00\nDomingo: 07:00 a 21:00",
+                    "lat": -19.04373,
+                    "lng": -65.24549
+                },
+                {
+                    "type": "atm",
+                    "name": "IDEPRO",
+                    "address": "Calle J. Prudencio Bustillos No. 350 esquina calle Paraguay,  Zona Mercado Campesino\n\nHorarios:\nLunes: 08:30 a 16:00\nMartes: 08:30 a 16:00\nMiércoles: 08:30 a 16:00\nJueves: 08:30 a 16:00\nViernes: 08:30 a 16:00\nSábado: 09:00 a 12:30\nDomingo: Sin horario",
+                    "lat": -19.033932871,
+                    "lng": -65.2518427041
+                },
+                {
+                    "type": "atm",
+                    "name": "IDEPRO",
+                    "address": "Plaza Trigo Arce esq. c. 25 de Mayo\n\nHorarios:\nLunes: 08:30 a 16:00\nMartes: 08:30 a 16:00\nMiércoles: 08:30 a 16:00\nJueves: 08:30 a 16:00\nViernes: 08:30 a 16:00\nSábado: Sin horario\nDomingo: Sin horario",
+                    "lat": -20.1020673616,
+                    "lng": -65.1341057806
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Calle Mariscal Sucre, S/N, Icla\n\nHorarios:\nLunes: Sin horario\nMartes: Sin horario\nMiércoles: Sin horario\nJueves: 10:00 a 16:00\nViernes: Sin horario\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -19.3636618309563,
+                    "lng": -64.7932311344627
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Avenida Marcelo Quiroga Santa Cruz, S/N, Entre Calles Mutún Y Quillacollo.\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -19.0242306836734,
+                    "lng": -65.2473193209877
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Calle Eulogio Ostria Reyes, N° 726 entre calles J. Prudencio Bustillos y Ricardo Jaimes Freyre, Zona San Pablo.\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -19.0344745787394,
+                    "lng": -65.2549463353646
+                },
+                {
+                    "type": "atm",
+                    "name": "IDEPRO",
+                    "address": "Calle Sucre s/n Barrio Central\n\nHorarios:\nLunes: 08:30 a 16:15\nMartes: 08:30 a 16:15\nMiércoles: 08:30 a 16:15\nJueves: 08:30 a 16:15\nViernes: 08:30 a 16:15\nSábado: 09:00 a 12:15\nDomingo: Sin horario",
+                    "lat": -19.7985149557,
+                    "lng": -63.955016492
+                },
+                {
+                    "type": "atm",
+                    "name": "IDEPRO",
+                    "address": "Plaza Principal Julio Andia\n\nHorarios:\nLunes: 08:30 a 16:15\nMartes: 08:30 a 16:15\nMiércoles: 08:30 a 16:15\nJueves: 08:30 a 16:15\nViernes: 08:30 a 16:15\nSábado: 09:00 a 12:15\nDomingo: Sin horario",
+                    "lat": -20.7240446,
+                    "lng": -64.8837171
+                },
+                {
+                    "type": "atm",
+                    "name": "IDEPRO",
+                    "address": "Calle Gran Chaco Nro. 12 esq. Ayacucho, Provincia Nor Cinti - Chuquisaca\n\nHorarios:\nLunes: 08:30 a 16:15\nMartes: 08:30 a 16:15\nMiércoles: 08:30 a 16:15\nJueves: 08:30 a 16:15\nViernes: 08:30 a 16:15\nSábado: 09:00 a 12:15\nDomingo: Sin horario",
+                    "lat": -20.641625,
+                    "lng": -65.2096722222
+                }
             ],
             "Cochabamba": [
-                { lat: -17.3925, lng: -66.1601, name: "Cajero 1", address: "Plaza 14 de Septiembre", type: "atm" },
-                { lat: -17.3752, lng: -66.1545, name: "Punto YOLO 2", address: "Cristo de la Concordia", type: "yolo" },
-                { lat: -17.3740, lng: -66.1663, name: "Cajero 3", address: "Av. América Oeste", type: "atm" },
-                { lat: -17.3963, lng: -66.1702, name: "Punto YOLO 4", address: "Zona Recoleta", type: "yolo" },
-                { lat: -17.4143, lng: -66.1592, name: "Cajero 5", address: "Av. Blanco Galindo", type: "atm" },
-                { lat: -17.3898, lng: -66.1453, name: "Punto YOLO 6", address: "Hupermall", type: "yolo" },
-                { lat: -17.3949, lng: -66.1567, name: "Cajero 7", address: "Plaza de las Banderas", type: "atm" },
-                { lat: -17.4056, lng: -66.1432, name: "Punto YOLO 8", address: "Cine Center", type: "yolo" }
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Calle San Martin Esq.Sucre\n\nHorarios:\nLunes: 14:00 a 21:00\nMartes: 14:00 a 21:00\nMiércoles: 14:00 a 21:00\nJueves: 14:00 a 21:00\nViernes: 14:00 a 21:00\nSábado: 14:00 a 21:00\nDomingo: Sin horario",
+                    "lat": -17.3938586,
+                    "lng": -66.154154
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av.Melchor Perez Esq.D´orbigni\n\nHorarios:\nLunes: 14:00 a 21:00\nMartes: 14:00 a 21:00\nMiércoles: 14:00 a 21:00\nJueves: 14:00 a 21:00\nViernes: 14:00 a 21:00\nSábado: 09:00 a 17:00\nDomingo: 09:00 a 17:00",
+                    "lat": -17.3886159,
+                    "lng": -66.1794953
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av.America Esq.Adela Zamudio\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.3723267,
+                    "lng": -66.1638264
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av Ballivian # 665\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.3857731,
+                    "lng": -66.1579149
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Melchor Perez esq America\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.37150232,
+                    "lng": -66.17553238
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Blanco Galindo -Colcapirhua\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.39142113,
+                    "lng": -66.21954474
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Blanco Galindo calle Antofagasta\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.3942115,
+                    "lng": -66.2781967
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Avenida Simón López Esq. Yuqui Yupanqui Nº1278\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.3639369,
+                    "lng": -66.1792655
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Avenida Villazón KM4 acera Norte  zona Quintanilla\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.3833804,
+                    "lng": -66.11075
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Avenida Barrientos esquina Monseñor Alcocer - Sacaba\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.399296,
+                    "lng": -66.0397211
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Avenida Salamanca Esquina plaza Quintanilla\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.3825608,
+                    "lng": -66.1522773
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Villazón Mesadillo MZ 41\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.376599,
+                    "lng": -66.127528
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Trojes Tiquipaya\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.34533,
+                    "lng": -66.20381
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Libertador Bolivar Nro 1219 y Juan de la Rosa\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.378073,
+                    "lng": -66.160898
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Melchor Perez Esq. J. Aguayo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.37586,
+                    "lng": -66.17576
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Panamericana Calle J.G. Aguirre\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.42833,
+                    "lng": -66.159604
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Ayacucho Esq. Aroma\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.399651,
+                    "lng": -66.157609
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Siglo XX Z. Valle Hermoso\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.423815,
+                    "lng": -66.1354705
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Circunvalación Esq. Pio Hermosa N. 443 Urb. Pacata Alta Mzna1\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.373765,
+                    "lng": -66.123944
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Plaza 15  de Agosto - Quillacollo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.397678,
+                    "lng": -66.28137
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Rep.de Suecia Zona Alalay Norte\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.419248,
+                    "lng": -66.147407
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Melchor Perez Olguin y Av. Capitán Victor Ustariz\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.39649,
+                    "lng": -66.1818
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Blanco Galindo Esq. Av. Cuarta\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.392923,
+                    "lng": -66.199431
+                },
+                {
+                    "type": "atm",
+                    "name": "IDEPRO",
+                    "address": "Calle Carmela Serruto No 126 entre calle Waldo Ballivian y calle Suarez Miranda, Zona Central Norte \n\nHorarios:\nLunes: 08:30 a 16:00\nMartes: 08:30 a 16:00\nMiércoles: 08:30 a 16:00\nJueves: 08:30 a 16:00\nViernes: 08:30 a 16:00\nSábado: 09:00 a 12:30\nDomingo: Sin horario",
+                    "lat": -17.3928759556,
+                    "lng": -66.2813473738
+                },
+                {
+                    "type": "atm",
+                    "name": "IDEPRO",
+                    "address": "Calle Tapia s/n entre calle Eufronio Viscarra y Plaza Independencia\n\nHorarios:\nLunes: 08:30 a 16:00\nMartes: 08:30 a 16:00\nMiércoles: 08:30 a 16:00\nJueves: 08:30 a 16:00\nViernes: 08:30 a 16:00\nSábado: 09:00 a 12:30\nDomingo: Sin horario",
+                    "lat": -17.941996273,
+                    "lng": -65.3411470048
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Beijin esq. Av. Juan de la Rosa\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": " -17,37433",
+                    "lng": -66.18046
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Avenida República, Nº 1822, Esquina Calle Manuripi, Zona San Carlos.\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -17.409966170058,
+                    "lng": -66.1509833106064
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Calle Carmela Serruto, S/N, Entre Avenida Suárez Miranda Y La Calle 23 De Marzo, Zona Central.\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -17.3929399448791,
+                    "lng": -66.280336181012
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Calle Beni entre calle Loa y calle Pablo Jaimes \n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -17.337631,
+                    "lng": -66.2196405
+                },
+                {
+                    "type": "atm",
+                    "name": "IDEPRO",
+                    "address": "Av. Heroínas Nro. 444 (entre Tumusla y Falsuri)\n\nHorarios:\nLunes: 08:30 a 16:15\nMartes: 08:30 a 16:15\nMiércoles: 08:30 a 16:15\nJueves: 08:30 a 16:15\nViernes: 08:30 a 16:15\nSábado: 09:00 a 12:15\nDomingo: Sin horario",
+                    "lat": -17.3930917123,
+                    "lng": -66.1628976831
+                }
+            ],
+            "La Paz": [
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Sanchez Lima Esq.Pedro Sal\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -16.51139875,
+                    "lng": -68.12680322
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av.Garcia Lanza Esq.Calle 9\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -16.535333,
+                    "lng": -68.075375
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Avenida Plan 405 Calle 17 A Nº864 Ciudad Satélite\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -16.52261,
+                    "lng": -68.15464
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Avenida Arce Esquina Pasaje Cordero Nº 2809\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -16.5131,
+                    "lng": -68.12054
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Avenida Hernando Siles Nº 5204 Local Nº1 Edificio Premium, zona Obrajes\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -16.525452,
+                    "lng": -68.109632
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Avenida Juan Muñoz Reyes esquina Calle 28,  Zona Cota Cota\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -16.54074,
+                    "lng": -68.067391
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Edificio Villa Pequeña Nº 197 Urbanizacion La Barqueta entre las calles 29 y 30\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -16.5208462,
+                    "lng": -68.0638673
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Teleférico Azul - Estación Rio Seco\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -16.48966,
+                    "lng": -68.20816
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Centro Comercial Shopping Norte calle Potosí entre Ayacucho y Socabaya.\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -16.496395,
+                    "lng": -68.134859
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Avenida Ballivián entre las calles 12 y 13 Zona Calacoto, Edificio Flor de Loto\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -16.540446,
+                    "lng": -68.087939
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Zona Miraflores Av. Busch esquina calle Panamá\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -16.4970357,
+                    "lng": -68.121383
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Satélite 200, El Alto\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 07:00 a 15:00 y 15:00 a 21:00\nDomingo: 07:00 a 15:00 y 15:00 a 21:00",
+                    "lat": -16.516419,
+                    "lng": -68.16588
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Avenida 16 de Julio, La Paz\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 07:00 a 15:00 y 15:00 a 21:00\nDomingo: 07:00 a 15:00 y 15:00 a 21:00",
+                    "lat": -16.500496,
+                    "lng": -68.13404
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Jose Aguirre esq Calle 5\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 07:00 a 15:00 y 15:00 a 21:00\nDomingo: 07:00 a 15:00 y 15:00 a 21:00",
+                    "lat": -16.545292,
+                    "lng": -68.072891
+                },
+                {
+                    "type": "atm",
+                    "name": "IDEPRO",
+                    "address": "Calle Pedro Salazar No. 509, Zona Sopocachi\n\nHorarios:\nLunes: 08:30 a 16:00\nMartes: 08:30 a 16:00\nMiércoles: 08:30 a 16:00\nJueves: 08:30 a 16:00\nViernes: 08:30 a 16:00\nSábado: 09:00 a 12:30\nDomingo: Sin horario",
+                    "lat": -16.5117108577,
+                    "lng": -68.1270934638
+                },
+                {
+                    "type": "atm",
+                    "name": "IDEPRO",
+                    "address": "Calle Luis Lara No.604, Zona de San Pedro\n\nHorarios:\nLunes: 08:30 a 16:00\nMartes: 08:30 a 16:00\nMiércoles: 08:30 a 16:00\nJueves: 08:30 a 16:00\nViernes: 08:30 a 16:00\nSábado: 09:00 a 12:30\nDomingo: Sin horario",
+                    "lat": -16.501966,
+                    "lng": -68.139912
+                },
+                {
+                    "type": "atm",
+                    "name": "IDEPRO",
+                    "address": "Av. Panamericana s/n, entre calles Beni y Pando\n\nHorarios:\nLunes: 08:30 a 16:00\nMartes: 08:30 a 16:00\nMiércoles: 08:30 a 16:00\nJueves: 08:30 a 16:00\nViernes: 08:30 a 16:00\nSábado: 09:00 a 12:30\nDomingo: Sin horario",
+                    "lat": -17.2383972339,
+                    "lng": -67.9112782124
+                },
+                {
+                    "type": "atm",
+                    "name": "IDEPRO",
+                    "address": "Plaza 16 de Julio s/n\n\nHorarios:\nLunes: 08:30 a 16:00\nMartes: 08:30 a 16:00\nMiércoles: 08:30 a 16:00\nJueves: 08:30 a 16:00\nViernes: Sin horario\nSábado: Sin horario\nDomingo: 07:30 a 15:00",
+                    "lat": -16.9045330002,
+                    "lng": -67.539423798
+                },
+                {
+                    "type": "atm",
+                    "name": "IDEPRO",
+                    "address": "Calle Tomás Monje s/n esquina Pasaje Adalid Linares \n\nHorarios:\nLunes: 08:30 a 16:00\nMartes: 08:30 a 16:00\nMiércoles: 08:30 a 16:00\nJueves: 08:30 a 16:00\nViernes: 08:30 a 16:00\nSábado: 09:00 a 12:30\nDomingo: Sin horario",
+                    "lat": -16.1887716545,
+                    "lng": -67.7278227649
+                },
+                {
+                    "type": "atm",
+                    "name": "IDEPRO",
+                    "address": "Calle Batallón de Ingenieros s/n esquina Avenida Mariscal Santa Cruz    \n\nHorarios:\nLunes: 08:30 a 16:00\nMartes: 08:30 a 16:00\nMiércoles: 08:30 a 16:00\nJueves: 08:30 a 16:00\nViernes: 08:30 a 16:00\nSábado: 09:00 a 12:30\nDomingo: Sin horario",
+                    "lat": -15.8327364441,
+                    "lng": -67.5650997301
+                },
+                {
+                    "type": "atm",
+                    "name": "IDEPRO",
+                    "address": "Av. Panamericana No. 368 entre Calles José Manuel Cortez y Miguel Iglesias, zona Mariscal Sucre, El Alto\n\nHorarios:\nLunes: 08:30 a 16:00\nMartes: 08:30 a 16:00\nMiércoles: 08:30 a 16:00\nJueves: 08:30 a 16:00\nViernes: 08:30 a 16:00\nSábado: 09:00 a 12:30\nDomingo: Sin horario",
+                    "lat": -16.4859304341,
+                    "lng": -68.2262674785
+                },
+                {
+                    "type": "atm",
+                    "name": "IDEPRO",
+                    "address": "Calle 3 No. 38 esquina Av. Juan Pablo II, Zona Ferropetrol,  El Alto \n\nHorarios:\nLunes: 08:30 a 16:00\nMartes: 08:30 a 16:00\nMiércoles: 08:30 a 16:00\nJueves: 08:30 a 16:00\nViernes: 08:30 a 16:00\nSábado: 09:00 a 12:30\nDomingo: Sin horario",
+                    "lat": -16.5024107362,
+                    "lng": -68.1665856457
+                },
+                {
+                    "type": "atm",
+                    "name": "IDEPRO",
+                    "address": "Av. Defensores del Chaco  casi esq. C.  50 No. 59, zona Chasquipampa \n\nHorarios:\nLunes: 08:30 a 16:00\nMartes: 08:30 a 16:00\nMiércoles: 08:30 a 16:00\nJueves: 08:30 a 16:00\nViernes: 08:30 a 16:00\nSábado: 09:00 a 12:30\nDomingo: Sin horario",
+                    "lat": -16.537466278,
+                    "lng": -68.049202114
+                },
+                {
+                    "type": "atm",
+                    "name": "IDEPRO",
+                    "address": "Carretera a Viacha (Av. Ladislao Cabrera) esq.  Av. Bolivia No. 13, cruce Villa Adela, El Alto \n\nHorarios:\nLunes: 08:30 a 16:00\nMartes: 08:30 a 16:00\nMiércoles: 08:30 a 16:00\nJueves: 08:30 a 16:00\nViernes: 08:30 a 16:00\nSábado: 09:00 a 12:30\nDomingo: Sin horario",
+                    "lat": -16.5343524616,
+                    "lng": -68.1911016997
+                },
+                {
+                    "type": "atm",
+                    "name": "IDEPRO",
+                    "address": "Avenida René Barrientos Ortuño s/n entre calle 1° de Enero y calle Oswaldo Natty\n\nHorarios:\nLunes: Sin horario\nMartes: Sin horario\nMiércoles: 08:30 a 16:00\nJueves: 08:30 a 16:00\nViernes: 07:00 a 15:00\nSábado: 07:00 a 15:00\nDomingo: 08:30 a 16:00",
+                    "lat": -16.1275796293,
+                    "lng": -67.1941609468
+                },
+                {
+                    "type": "atm",
+                    "name": "IDEPRO",
+                    "address": "Av. 6 de marzo Nº 2125. Urbanización Santísima Trinidad 1. El Alto\n\nHorarios:\nLunes: 08:30 a 16:00\nMartes: 08:30 a 16:00\nMiércoles: 08:30 a 16:00\nJueves: 08:30 a 16:00\nViernes: 08:30 a 16:00\nSábado: 09:00 a 12:30\nDomingo: Sin horario",
+                    "lat": -16.5977466708,
+                    "lng": -68.1844116068
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Plaza El Carmen, Nº 170, entre calles Yanacocha y Pacajes, zona central Masaya.\n\nHorarios:\nLunes: Sin horario\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 07:00 a 13:00\nDomingo: Sin horario",
+                    "lat": -16.0452245593678,
+                    "lng": -68.6853481897438
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Avenida Alfonso Ugarte Nº 95, entre calles Pabón y Chacón, zona Ballivián.\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -16.4891479066648,
+                    "lng": -68.1721565938599
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Plaza Principal René Barrientos Ortuño.\n\nHorarios:\nLunes: Sin horario\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 07:00 a 13:00\nDomingo: Sin horario",
+                    "lat": -16.2992116655048,
+                    "lng": -68.532035263546
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Carretera a Copacabana, Nº 4925, Casi Esq. Av. Simón Bolivar, Zona Bautista Saavedra U.V.\"E\" \n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -16.4837766676508,
+                    "lng": -68.2391813790105
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Carretera Principal a Charaña, Ruta F19, S/N, Caquiaviri\n\nHorarios:\nLunes: Sin horario\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 07:00 a 13:00\nDomingo: Sin horario",
+                    "lat": -17.0214011963868,
+                    "lng": -68.6084466011887
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Avenida Batallón De Ingenieros S/N, Entre Calle 12 De Octubre Y Avenida Cívica, Zona Villa Esperanza\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -15.8358716690728,
+                    "lng": -67.5662021179993
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Carretera A Viacha, Nº 8494, Entre Pasajes 2 Y 3, Zona Complementación 6 De Junio \n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -16.5515338915886,
+                    "lng": -68.2067567054987
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Avenida Defensores Del Chaco, Nº 85, Entre Calles 51 y 52, Zona Chasquipampa.\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -16.5371169058073,
+                    "lng": -68.0471357281785
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Plaza Central, S/N, Zona Arasaya\n\nHorarios:\nLunes: Sin horario\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 07:00 a 13:00\nDomingo: Sin horario",
+                    "lat": -16.1923709810902,
+                    "lng": -68.7452766024162
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Calle Bolivar, S/N, Entre Calle Gral. José Manuel Pando Y Pasaje Miguel Mercado, Zona Central.\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -16.4097603299379,
+                    "lng": -67.5261259519066
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Calle Primavera N°26, Esquina Calle Girasol, Zona Uno, Urbanización Achachicala\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -16.4534546122282,
+                    "lng": -68.1498661936749
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Avenida 6 De Agosto S/N, Entre Calle Pando y Calle Oruro. \n\nHorarios:\nLunes: Sin horario\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 07:00 a 13:00\nDomingo: Sin horario",
+                    "lat": -16.1657422035251,
+                    "lng": -69.0864464785736
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Avenida Litoral, Nº 1016, Entre Calles Kana Wilki y Viluyo, Zona Cosmos 79\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -16.5261869696189,
+                    "lng": -68.2173256275872
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Avenida 8, Nº 648, Entre Calles \"R\" Y \"S\", Zona Estrellas De Belén.\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -16.5012946052455,
+                    "lng": -68.2167912340767
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Avenida Franco Valle, Nº 900, Entre Calles 5 Y 6 , Zona 12 De Octubre\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -16.5106198030818,
+                    "lng": -68.1636090216582
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Avenida Buenos Aires, Nº 5014, Casi Esquina Avenida Franz Tamayo, (Carretera a Laja)\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -16.5042752078393,
+                    "lng": -68.2483334359279
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Av. Ballivián, S/N, Plaza Principal, Frente a la Alcaldía Municipal, Puerto de Guaqui.\n\nHorarios:\nLunes: Sin horario\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 07:00 a 13:00\nDomingo: Sin horario",
+                    "lat": -16.593504019088,
+                    "lng": -68.8521817518509
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Avenida Santa Vera Cruz, Nro. 33, Esquina Calle 22B Tarija, Zona Huayna Potosi.\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -16.4787520110861,
+                    "lng": -68.1844974375374
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Av. La Paz, S/N, Entre Calles Sta Cruz y Cobija, Lote Nº5, Mnzo.Nº4, Barrio Macarani.\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -13.7667742057523,
+                    "lng": -68.1266556131058
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Plaza Franco Guachalla, S/N, Calle Coro Coro, Frente a la Iglesia Jesús de Machaca.\n\nHorarios:\nLunes: Sin horario\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 07:00 a 13:00\nDomingo: Sin horario",
+                    "lat": -16.7437635691773,
+                    "lng": -68.8062034940262
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Avenida Juan Pablo II, Nro. 125, Esquina Calle Subbte. Jorge Eulert, Zona 16 De Julio.\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -16.5000166923038,
+                    "lng": -68.1734052237991
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Avenida Litoral, Nº 26, Lote Nº 4-A, Mnzo. 1036, Casi Esq. Carretera Viacha, Z. Asunción San Pedro.\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -16.5427620936651,
+                    "lng": -68.1975959191561
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Calle 17 , Nº 506, Entre Prolongación 14 De Septiembre,Zona Obrajes.\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -16.5295291668593,
+                    "lng": -68.100092759185
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Avenida Antofagasta, Nº 116, Entre Calle Sucre, Zona Central\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -15.587561,
+                    "lng": -67.248847
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Avenida Eduardo Avaroa S/N.\n\nHorarios:\nLunes: Sin horario\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 07:00 a 13:00\nDomingo: Sin horario",
+                    "lat": -16.399274658967,
+                    "lng": -68.4751604153223
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Plaza Juan José Pérez, S/N, Esquina Avenida 16 de Julio, localidad Puerto Pérez.\n\nHorarios:\nLunes: Sin horario\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 07:00 a 13:00\nDomingo: Sin horario",
+                    "lat": -16.2845421354358,
+                    "lng": -68.6001311860161
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Avenida Juan Pablo II, Nº60, Zona Río Seco, Ex-Tranca De Río Seco.\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -16.490036139605,
+                    "lng": -68.206024595277
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Plaza Principal, Entre Calle Palacios y Santa Cruz, S/N, Zona Central. \n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -14.4384372610269,
+                    "lng": -67.5361109394257
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Avenida Ladislao Cabrera (Carretera A Viacha) N°1019, Entre Calles 15 y 16, Zona “Urbanización Inti” San Martin De Porres de La Ciudad del Alto.\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -16.56663,
+                    "lng": -68.220404
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Avenida Panamericana, Nº 3174, Esquina Calle General Juan José Tórrez, Carretera A Copacabana, Zona San Roque.\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -16.4759261738077,
+                    "lng": -68.2736948405417
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Avenida Cívica, Nº 985, Esquina Calle 4, Zona Villa Tejada Triangular. \n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -16.5192194536442,
+                    "lng": -68.1569632530402
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Avenida Copacabana, Nro. 10, Santiago de Machaca\n\nHorarios:\nLunes: Sin horario\nMartes: 09:00 a 15:00\nMiércoles: 09:00 a 15:00\nJueves: Sin horario\nViernes: Sin horario\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -17.0662586345706,
+                    "lng": -69.1933102894798
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Calle Aconcagua, Nro. 3974 y Calle Melchor Urquidi, Zona Urbanización Senkata  Pucarani de La Ciudad de El Alto.\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -16.5807115336329,
+                    "lng": -68.1859176672108
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Calle Sucre, Nº 129, Esquina Calle Villavicencio,  frente a la Plaza Enrique Peñaranda, Z. Central\n\nHorarios:\nLunes: Sin horario\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 07:00 a 13:00\nDomingo: Sin horario",
+                    "lat": -15.7733557252311,
+                    "lng": -68.6493123371872
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Avenida Jaimes Freyre, Nº 1748, Entre Av. Landaeta y Calle Feliciano Kantuta Z. Tembladerani\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -16.5112750268141,
+                    "lng": -68.1429595838468
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Avenida Viracocha, Nº 2448, Esquina Manco Kapac, Zona Central.\n\nHorarios:\nLunes: Sin horario\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 07:00 a 13:00\nDomingo: Sin horario",
+                    "lat": -16.55543616687,
+                    "lng": -68.679501135472
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Avenida Manco Kapac N° 425, Entre Calle Isaac Tamayo y Av Buenos Aires (Nudo Vita), Zona San Sebastian.\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -16.4934812632799,
+                    "lng": -68.1441267218387
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Avenida 6 de Marzo, Nº 5705, Casi Esquina Avenida Prados del Norte, Zona Modelo, Ventilla.\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -16.6188084188544,
+                    "lng": -68.182367686099
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Avenida Ingavi, Nro. S/N, Entre Avenida José Manuel Pando Y Calle Pedro Domingo Murillo, Zona Central, Ciudad De Viacha.\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -16.6530976841387,
+                    "lng": -68.3001347208931
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Carretera A Viacha, Nº 11, Cruce de Villa Adela, Zona Villa Bolivar Municipal.\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -16.5354879768236,
+                    "lng": -68.1912324643738
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Avenida Esteban Arce, Nº 1843, Cruce Villa Copacabana\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -16.4955984854167,
+                    "lng": -68.1162710125565
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Avenida Las Américas, Nº 506, Zona Villa Fátima.\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -16.4763111950238,
+                    "lng": -68.1188435589455
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Calle Laguna, Nro. 492, Entre Pasaje Laguna y Avenida Periférica, Zona Vino Tinto\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -16.4830096453,
+                    "lng": -68.1454014917308
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Avenida Heroes Del Pacífico N° 1404, Entre Calles Jose Santos Prada y José Maria Asin, Zona Callampaya.\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -16.4954383641704,
+                    "lng": -68.1524398018987
+                },
+                {
+                    "type": "atm",
+                    "name": "IDEPRO",
+                    "address": "Avenida Alfonso Ugarte No. 250 entre calles J. Arzabe y Pascoe Zona 16 de Julio\n\nHorarios:\nLunes: 09:00 a 16:45\nMartes: 09:00 a 16:45\nMiércoles: 09:00 a 16:45\nJueves: 09:00 a 16:45\nViernes: 09:00 a 16:45\nSábado: 09:00 a 12:15\nDomingo: Sin horario",
+                    "lat": -16.4964332767,
+                    "lng": -68.1738433968
+                }
+            ],
+            "Oruro": [
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av.Bolivar entre C. La Plata y Presidente Montes al frente de la plaza 10 de febrero\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 07:00 a 21:00\nDomingo: 07:00 a 21:00",
+                    "lat": -17.970105,
+                    "lng": -67.114795
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Avenida Villaroel esquina Tarapacá\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 07:00 a 21:00\nDomingo: 07:00 a 21:00",
+                    "lat": -17.961344,
+                    "lng": -67.101333
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Avenida 6 de Octubre esquina Oblitas Edificio Cosmos\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 07:00 a 21:00\nDomingo: 07:00 a 21:00",
+                    "lat": -17.958868,
+                    "lng": -67.109538
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Calle Bolivar, S/N, Frente a La Plaza Fermín López\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -18.2862569485448,
+                    "lng": -66.8348568456506
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Avenida España, Nº 2063 Entre General Achá y 1ro. de Mayo, Zona Sud.\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -17.9786981751618,
+                    "lng": -67.1329533881394
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Avenida Bolivar, Nº 445, (Edificio Sajama), Entre Calles Tarapacá y Tejerina, Zona Central\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -17.9729051515093,
+                    "lng": -67.1051723093514
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Avenida del Ejército Nro. 890, Entre Calles Antofagasta y Pisagua, Zona Este\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -17.970234879819,
+                    "lng": -67.0987403422352
+                },
+                {
+                    "type": "atm",
+                    "name": "IDEPRO",
+                    "address": "Calle Pagador Nro. 6338 entre Aldana y Murguia\n\nHorarios:\nLunes: 09:00 a 16:45\nMartes: 09:00 a 16:45\nMiércoles: 09:00 a 16:45\nJueves: 09:00 a 16:45\nViernes: 09:00 a 16:45\nSábado: 09:00 a 12:15\nDomingo: Sin horario",
+                    "lat": -17.973225,
+                    "lng": -67.1112305556
+                },
+                {
+                    "type": "atm",
+                    "name": "IDEPRO",
+                    "address": "Avenida del Ejército No. 932 entre calles Pisagua y Antofagasta\n\nHorarios:\nLunes: 09:00 a 16:45\nMartes: 09:00 a 16:45\nMiércoles: 09:00 a 16:45\nJueves: 09:00 a 16:45\nViernes: 09:00 a 16:45\nSábado: 09:00 a 12:15\nDomingo: Sin horario",
+                    "lat": -17.9703596823,
+                    "lng": -67.0991345132
+                },
+                {
+                    "type": "atm",
+                    "name": "IDEPRO",
+                    "address": "Plaza Antofagasta Av. Cabrera s/n\n\nHorarios:\nLunes: 09:00 a 16:45\nMartes: 09:00 a 16:45\nMiércoles: 09:00 a 16:45\nJueves: 09:00 a 16:45\nViernes: 09:00 a 16:45\nSábado: 09:00 a 12:15\nDomingo: Sin horario",
+                    "lat": -18.9031638889,
+                    "lng": -66.7637444444
+                }
+            ],
+            "Pando": [
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Avenida 9 de Febrero esquina Beni\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 07:00 a 21:00\nDomingo: 07:00 a 21:00",
+                    "lat": -11.018685,
+                    "lng": -68.75556
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Teniente coronel Emilio Fernández molina y Av. Teniente Enrique Fernandez Cornejo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -11.018493,
+                    "lng": -68.754091
+                },
+                {
+                    "type": "atm",
+                    "name": "IDEPRO",
+                    "address": "Av. 9 de Febrero s/n Zona Central\n\nHorarios:\nLunes: 08:30 a 16:15\nMartes: 08:30 a 16:15\nMiércoles: 08:30 a 16:15\nJueves: 08:30 a 16:15\nViernes: 08:30 a 16:15\nSábado: 09:00 a 12:15\nDomingo: Sin horario",
+                    "lat": -11.0212,
+                    "lng": -68.7573361111
+                }
+            ],
+            "Potosi": [
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Avenida Litoral N 651 esquina Chayanta Zona San Roque\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 10:30 a 13:00 y 17:30 a 21:00\nDomingo: 10:30 a 13:00 y 17:30 a 21:00",
+                    "lat": -19.580926,
+                    "lng": -65.752723
+                },
+                {
+                    "type": "atm",
+                    "name": "IDEPRO",
+                    "address": "Av. Litoral S/N entre Av. Arce y c. Villarroel\n\nHorarios:\nLunes: 08:30 a 16:00\nMartes: 08:30 a 16:00\nMiércoles: 08:30 a 16:00\nJueves: 08:30 a 16:00\nViernes: 08:30 a 16:00\nSábado: 09:00 a 12:30\nDomingo: Sin horario",
+                    "lat": -19.5799056043,
+                    "lng": -65.7554683105
+                },
+                {
+                    "type": "atm",
+                    "name": "IDEPRO",
+                    "address": "Calle 6 de agosto No. 125 entre c. 20 de mayo y c.\nIndependencia\n\nHorarios:\nLunes: 08:30 a 16:00\nMartes: 08:30 a 16:00\nMiércoles: 08:30 a 16:00\nJueves: 08:30 a 16:00\nViernes: 08:30 a 16:00\nSábado: 09:00 a 12:30\nDomingo: Sin horario",
+                    "lat": -22.0903872107,
+                    "lng": -65.5958856525
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Calle Mariscal Santa Cruz, Nro. 17, Entre Calles Bolivar y Baptista.\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -18.42267355537,
+                    "lng": -66.5847304688255
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Calle Sucre S/N, Entre Calle Avaroa y Calle Junín, Zona Central.\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -18.6989986688536,
+                    "lng": -66.1636017473965
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Calle Schmidt, N°133, Entre Calles 12 De Octubre y San Alberto, Zona San Roque, Ciudad De Potosi.\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -19.576692,
+                    "lng": -65.754271
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Calle Gregorio Morales, Esq. Plaza Asencio Padilla, S/N, Ravelo.\n\nHorarios:\nLunes: Sin horario\nMartes: Sin horario\nMiércoles: 09:00 a 14:00\nJueves: Sin horario\nViernes: Sin horario\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -18.8060966495062,
+                    "lng": -65.5117594864855
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Calle América Nro. 108, Entre Calle René Moreno y Avenida Highland Players, Zona Mercado Chuquimia.\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -19.5809819501793,
+                    "lng": -65.7637669142853
+                },
+                {
+                    "type": "atm",
+                    "name": "IDEPRO",
+                    "address": "calle Bustillos Nro.1020 esquina calleBolívar\n\nHorarios:\nLunes: 09:00 a 16:45\nMartes: 09:00 a 16:45\nMiércoles: 09:00 a 16:45\nJueves: 09:00 a 16:45\nViernes: 09:00 a 16:45\nSábado: 09:00 a 12:15\nDomingo: Sin horario",
+                    "lat": -19.5875467731,
+                    "lng": -65.7546710239
+                },
+                {
+                    "type": "atm",
+                    "name": "IDEPRO",
+                    "address": "Calle Sucre Nro. 257 entre Colón y Cabrera\n\nHorarios:\nLunes: 09:00 a 16:45\nMartes: 09:00 a 16:45\nMiércoles: 09:00 a 16:45\nJueves: 09:00 a 16:45\nViernes: 09:00 a 16:45\nSábado: 09:00 a 12:15\nDomingo: Sin horario",
+                    "lat": -20.4608083333,
+                    "lng": -66.8243861111
+                },
+                {
+                    "type": "atm",
+                    "name": "IDEPRO",
+                    "address": "Avenida Bolivar s/n casi esquina calle Thumilki.\n\nHorarios:\nLunes: 08:30 a 16:00\nMartes: Sin horario\nMiércoles: Sin horario\nJueves: 08:30 a 16:00\nViernes: Sin horario\nSábado: Sin horario\nDomingo: 08:00 a 15:30",
+                    "lat": -19.5538307792,
+                    "lng": -65.4508103099
+                }
+            ],
+            "Tarija": [
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Victor Paz Estensoro y Av. Luis Campero\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 07:00 a 21:00\nDomingo: 07:00 a 21:00",
+                    "lat": -21.522544,
+                    "lng": -64.740845
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av.Cochabamba esq. Suipacha\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -21.530806,
+                    "lng": -64.72987
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Jaime Paz Esq. C/Eulogio Ruiz\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 10:00 a 14:00 y 17:30 a 21:00 \nDomingo: 10:00 a 14:00 y 17:30 a 21:00 ",
+                    "lat": -21.541005,
+                    "lng": -64.724379
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Calle 15 de Abril Esq.Gral.Trigo\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -21.5341028,
+                    "lng": -64.7350661
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Calle Crevaux  esq comercio .. Frente a la plaza principal\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 09:00 a 13:00 y 17:00 a 21:00\nDomingo: 09:00 a 13:00 y 17:00 a 21:00",
+                    "lat": -22.0145345,
+                    "lng": -63.6774903
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Defensores del Chaco Esq. Av. M. Font\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 07:00 a 21:00\nDomingo: 07:00 a 21:00",
+                    "lat": -21.5406816,
+                    "lng": -64.7135372
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Av. Potosi N 435 Z. LA PAMPA\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 07:00 a 21:00\nDomingo: 07:00 a 21:00",
+                    "lat": -21.531836,
+                    "lng": -64.727823
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Julio Arce esq. Héroes De La Independencia.\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 07:00 a 21:00\nDomingo: 07:00 a 21:00",
+                    "lat": -21.537578,
+                    "lng": -64.750234
+                },
+                {
+                    "type": "yolo",
+                    "name": "FARMACORP",
+                    "address": "Calle 15 de abril nro 982 esquina av Víctor paz estensoro\n\nHorarios:\nLunes: 07:00 a 21:00\nMartes: 07:00 a 21:00\nMiércoles: 07:00 a 21:00\nJueves: 07:00 a 21:00\nViernes: 07:00 a 21:00\nSábado: 07:00 a 21:00\nDomingo: 07:00 a 21:00",
+                    "lat": -21.53257,
+                    "lng": -64.740045
+                },
+                {
+                    "type": "atm",
+                    "name": "DIACONIA",
+                    "address": "Avenida Panamericana, Nº 1791, Frente al Mercado Campesino, Zona Luís Pizarro.\n\nHorarios:\nLunes: 08:00 a 16:00\nMartes: 08:00 a 16:00\nMiércoles: 08:00 a 16:00\nJueves: 08:00 a 16:00\nViernes: 08:00 a 16:00\nSábado: 08:30 a 12:00\nDomingo: Sin horario",
+                    "lat": -21.5208310581288,
+                    "lng": -64.7429787778236
+                },
+                {
+                    "type": "atm",
+                    "name": "IDEPRO",
+                    "address": "Calle Ingavi Nro. 339 entre calle General Trigo y calle Sucre, ciudad de Tarija\n\nHorarios:\nLunes: 08:30 a 16:15\nMartes: 08:30 a 16:15\nMiércoles: 08:30 a 16:15\nJueves: 08:30 a 16:15\nViernes: 08:30 a 16:15\nSábado: 09:00 a 12:15\nDomingo: Sin horario",
+                    "lat": -21.532927778,
+                    "lng": -64.7338
+                },
+                {
+                    "type": "atm",
+                    "name": "IDEPRO",
+                    "address": "Calle Recreo esq.\nBolívar, Plaza Principal, Valle de la Concepción, Tarija.\n\nHorarios:\nLunes: 08:30 a 16:15\nMartes: 08:30 a 16:15\nMiércoles: 08:30 a 16:15\nJueves: 08:30 a 16:15\nViernes: 08:30 a 16:15\nSábado: 09:00 a 12:15\nDomingo: Sin horario",
+                    "lat": -21.6957138889,
+                    "lng": -64.6533722222
+                }
             ]
         };
     
         function initMap() {
-            map = new google.maps.Map(document.getElementById("map"), {
-                center: { lat: -17.7833, lng: -63.1821 },
-                zoom: 13,
-                mapTypeId: "roadmap",
-                styles: [
-                    { featureType: "poi", elementType: "labels", stylers: [{ visibility: "off" }] },
-                    { featureType: "poi.business", stylers: [{ visibility: "off" }] },
-                    { featureType: "poi.park", stylers: [{ visibility: "off" }] },
-                    { featureType: "poi.attraction", stylers: [{ visibility: "off" }] },
-                    { featureType: "transit", stylers: [{ visibility: "off" }] }
-                ]
+        map = new google.maps.Map(document.getElementById("map"), {
+            center: { lat: -17.7833, lng: -63.1821 },
+            zoom: 13,
+            mapTypeId: "roadmap",
+            styles: [
+                { featureType: "poi", elementType: "labels", stylers: [{ visibility: "off" }] },
+                { featureType: "poi.business", stylers: [{ visibility: "off" }] },
+                { featureType: "poi.park", stylers: [{ visibility: "off" }] },
+                { featureType: "poi.attraction", stylers: [{ visibility: "off" }] },
+                { featureType: "transit", stylers: [{ visibility: "off" }] }
+            ]
+        });
+    
+        Object.keys(locations).forEach(city => addMarkers(city));
+    }
+    
+    function addMarkers(city) {
+        const cityLocations = locations[city];
+        cityLocations.forEach((location) => {
+            const iconUrl = location.type === "atm" ? cajeroIconUrl : puntoYoloIconUrl;
+    
+            const marker = new google.maps.Marker({
+                position: { lat: location.lat, lng: location.lng },
+                map,
+                icon: iconUrl,
             });
     
-            Object.keys(locations).forEach(city => addMarkers(city));
-        }
-    
-        function addMarkers(city) {
-            const cityLocations = locations[city];
-            cityLocations.forEach((location) => {
-                const iconUrl = location.type === "atm" ? cajeroIconUrl : puntoYoloIconUrl;
-    
-                const marker = new google.maps.Marker({
-                    position: { lat: location.lat, lng: location.lng },
-                    map,
-                    icon: iconUrl,
-                });
-    
-                const infoWindow = new google.maps.InfoWindow({
-                    content: `
-                        <div style="font-family: 'Plus Jakarta Sans', sans-serif; width: 280px; padding: 8px 16px;">
-                            <h3>${location.name}</h3>
-                            <p>${location.address}</p>
-                        </div>
-                    `,
-                });
-    
-                marker.addListener("click", () => {
-                    infoWindow.open(map, marker);
-                });
-    
-                markers.push(marker);
+            const infoWindow = new google.maps.InfoWindow({
+                content: `
+                    <div style="font-family: 'Plus Jakarta Sans', sans-serif; width: 280px; padding: 8px 16px;">
+                        <h3>${location.name}</h3>
+                        <p>${location.address}</p>
+                    </div>
+                `,
             });
-        }
+    
+            marker.addListener("click", () => {
+                infoWindow.open(map, marker);
+            });
+    
+            // Añadimos la propiedad `type` al marcador para los filtros
+            marker.type = location.type;
+    
+            markers.push(marker);
+        });
+    }
+    
     </script>
     
     <script>
@@ -252,8 +2338,15 @@
         const cityCenters = {
             "Santa Cruz": { lat: -17.7833, lng: -63.1821 },
             "La Paz": { lat: -16.5002, lng: -68.1230 },
-            "Cochabamba": { lat: -17.3925, lng: -66.1601 }
+            "Cochabamba": { lat: -17.3925, lng: -66.1601 },
+            "Oruro": { lat: -17.9714, lng: -67.1108 },
+            "Potosí": { lat: -19.5723, lng: -65.7550 },
+            "Sucre": { lat: -19.0196, lng: -65.2619 },
+            "Tarija": { lat: -21.5355, lng: -64.7296 },
+            "Trinidad": { lat: -14.8333, lng: -64.9000 },
+            "Cobija": { lat: -11.0278, lng: -68.7687 }
         };
+
     
         // Referencia al contenedor del dropdown
         const dropdownContainer = document.getElementById("dropdown-container");
@@ -359,7 +2452,7 @@
                     content: `
                         <div style="font-family: 'Plus Jakarta Sans', sans-serif; width: 280px; padding: 8px 16px;">
                             <h3>${location.name}</h3>
-                            <p>${location.address}</p>
+                            <p>${location.address.replace(/\n/g, '<br>')}</p>
                         </div>
                     `,
                 });
